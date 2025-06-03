@@ -22,8 +22,6 @@ blind_nav_system/
 ├── assets/ # (Optional) Model weights or test media
 └── README.md # Project documentation
 
-yaml
-复制
 
 ---
 
@@ -48,8 +46,7 @@ numpy
 pyttsx3
 
 2. Run the Main Program
-bash
-复制
+
 python main.py
 This will:
 
@@ -65,7 +62,7 @@ Press ESC to exit.
 
 🧪 Sample Code Snippet
 python
-复制
+
 from fusion.data_align import InputAligner
 from perception.yolov5 import YoloV5Detector
 from navigation.simple_planner import astar_path_planning, simulate_and_speak_alerts
