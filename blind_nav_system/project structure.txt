@@ -1,0 +1,22 @@
+blind_nav_system/
+│
+├── sensors/
+│   ├── camera_module.py         # 实时读取图像帧
+│   └── pseudo_lidar.py          # 模拟 LiDAR 水平扫描（伪2D点云）
+│
+├── fusion/
+│   ├── data_align.py            # 将图像与点云时间对齐（同步）
+│   └── simple_fusion.py         # 将图像+点云映射至BEV平面并融合
+│
+├── perception/
+│   └── yolov5_tiny_infer.py     # 加载 YOLOv5-tiny 模型做目标检测
+│
+├── navigation/
+│   └── simple_planner.py        # 基于障碍点计算避障路径
+│
+├── feedback/
+│   └── voice_alert.py           # 使用 pyttsx3 播报语音
+│
+├── main.py                      # 启动主循环：感知 → 决策 → 播报
+└── utils/
+    └── bev_map.py               # 绘制BEV地图并显示障碍物
