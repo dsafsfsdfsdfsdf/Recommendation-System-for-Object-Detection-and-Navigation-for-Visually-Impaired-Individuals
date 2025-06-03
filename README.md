@@ -1,85 +1,91 @@
-Blind Navigation System (Camera + Pseudo-LiDAR Fusion)
-This project implements a real-time assistive navigation system designed for visually impaired individuals. It combines RGB camera input with simulated 2D LiDAR (pseudo-LiDAR) to detect obstacles, plan safe paths, and provide voice feedback using deep learning and sensor fusion techniques.
+# Blind Navigation System
 
-Features
-Real-time object detection using YOLOv5 (person, car, static obstacles)
+This project implements a lightweight AI-based navigation system to assist visually impaired individuals. It fuses camera input and pseudo-LiDAR scan data to detect obstacles, generate a real-time BEV (Bird’s Eye View) occupancy map, plan safe walking paths using A* algorithm, and provide voice feedback alerts.
 
-Pseudo-LiDAR simulation from RGB image scanlines
+---
 
-BEV occupancy grid generation for environmental modeling
+## 🗂️ Project Structure
 
-A path planning* to avoid obstacles dynamically
-
-Text-to-speech voice alerts (e.g. "Obstacle ahead at 1.5 meters")
-
-Modular architecture with clear separation of perception, planning, and control
-
-Debugging visualization of detection results and BEV map with planned path
-
-Project Structure
 blind_nav_system/
-├── main.py                       # Main control loop
+├── main.py # Main control loop
 ├── fusion/
-│   ├── data_align.py            # Synchronize camera and LiDAR inputs
-│   ├── simple_fusion.py         # Convert scan data to BEV grid
-│   └── bev_map.py               # Visualize BEV occupancy grid
+│ ├── data_align.py # Synchronize camera and LiDAR inputs
+│ ├── simple_fusion.py # Convert scan data to BEV grid
+│ └── bev_map.py # Visualize BEV occupancy grid
 ├── perception/
-│   └── yolov5.py                # YOLOv5 detector (Torch Hub API)
+│ └── yolov5.py # YOLOv5 detector (Torch Hub API)
 ├── navigation/
-│   └── simple_planner.py        # A* pathfinding and voice feedback
+│ └── simple_planner.py # A* pathfinding and voice feedback
 ├── sensors/
-│   ├── camera_module.py         # Webcam frame capture
-│   └── pseudo_lidar2d.py        # Generate simulated LiDAR scan
-├── assets/                      # (Optional) Model weights or test media
-└── README.md                    # Project documentation
-🚀 Getting Started
-Prerequisites
-Python ≥ 3.8
+│ ├── camera_module.py # Webcam frame capture
+│ └── pseudo_lidar2d.py # Generate simulated LiDAR scan
+├── assets/ # (Optional) Model weights or test media
+└── README.md # Project documentation
+
+yaml
+复制
+
+---
+
+## 🚀 Getting Started
+
+### 1. Install Dependencies
+
+Make sure you have Python 3.8+ installed. Then run:
+
+```bash
+pip install -r requirements.txt
+Required packages include:
+
+torch
+
+torchvision
 
 opencv-python
 
 numpy
 
-torch and torchvision
+pyttsx3
 
-pyttsx3 (for offline voice output)
-
-Install dependencies:
-
-pip install -r requirements.txt
-If you use GPU, ensure CUDA and PyTorch are correctly installed.
-
-Run the System
-
+2. Run the Main Program
+bash
+复制
 python main.py
-Press ESC to stop the system.
+This will:
 
-System Overview
-Camera captures real-time video frames.
+Capture camera input and simulate LiDAR
 
-Pseudo-LiDAR simulates a 2D scan using a horizontal slice of the image.
+Run YOLOv5 object detection
 
-YOLOv5 detects objects using a pre-trained model from Torch Hub.
+Generate BEV map and plan safe paths
 
-Scan-to-BEV conversion creates a binary grid map of free and occupied space.
+Provide voice alerts like “Obstacle 1.2 meters to your left”
 
-A* path planning computes a collision-free path from current location.
+Press ESC to exit.
 
-Voice module issues feedback like:
-“Obstacle 2.1 meters to your left”
+🧪 Sample Code Snippet
+python
+复制
+from fusion.data_align import InputAligner
+from perception.yolov5 import YoloV5Detector
+from navigation.simple_planner import astar_path_planning, simulate_and_speak_alerts
 
-Example Outputs
-YOLOv5 Detection	BEV Occupancy Map	Path Planning
+aligner = InputAligner()
+detector = YoloV5Detector(model_size="yolov5s")
+frame, scan = aligner.get_aligned_inputs()
+detections = detector.detect(frame)
+📌 Notes
+You can change the YOLO model size in main.py (yolov5s, yolov5m, etc.)
 
-Future Improvements
-Integrate real 2D/3D LiDAR sensor (e.g., RPLiDAR)
+If using GPU, make sure CUDA is available
 
-Add dynamic goal selection via voice or gesture
+Voice engine uses pyttsx3 (offline); configure English voice in simple_planner.py
 
-Improve object classification for semantic-level navigation
+📷 Example Screenshots
+BEV Occupancy Grid with Path
 
-Mobile or embedded deployment (e.g. Jetson Nano)
+YOLO Detection Overlay
 
-📄 License
-This project is for academic and research purposes. Contact the author for collaboration or deployment use cases.
+Real-time Voice Alert Feedback
 
+(Add your own screenshots here in markdown format if needed.)
